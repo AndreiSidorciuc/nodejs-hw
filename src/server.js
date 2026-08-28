@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
-import logger from './middleware/logger.js';
-import connectDatabase from './db/connectMongoDB.js';
+import { logger } from './middleware/logger.js';
+import { connectMongoDB } from './db/connectMongoDB.js';
 import notesRouter from './routes/notesRoutes.js';
-import notFoundHandler from './middleware/notFoundHandler.js';
-import errorHandler from './middleware/errorHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 // import { readFile } from 'node:fs/promises';
 // import { resolve } from 'node:path';
 
@@ -45,10 +45,10 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Підключення до баси
-await connectDatabase();
+await connectMongoDB();
 
 // Запуск сервера
-const PORT = Number(process.env.PORT) || 3030;
+const PORT = Number(process.env.PORT) || 3000;
 
 // Логінимо запуск сервера
 app.listen(PORT, () => {

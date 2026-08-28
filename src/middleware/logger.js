@@ -14,4 +14,4 @@ const logger = PinoHttp({
   },
 });
 
-export default logger;
+export { logger };
