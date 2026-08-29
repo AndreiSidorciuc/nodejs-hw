@@ -31,6 +31,7 @@
 import { Router } from 'express';
 import {
   getAllNotes, // Змінено з getNote
+  getNoteById, //Поайді get запит
   createNote, // Змінено з addPostNotes
   updateNote, // Змінено з updateNoteById
   deleteNote, // Змінено з deleteNoteById
@@ -41,6 +42,8 @@ const notesRouter = Router();
 
 // 2. ВИПРАВЛЕНО: Маршрут GET для всіх нотаток (шлях /notes, функція getAllNotes)
 notesRouter.get('/notes', getAllNotes);
+
+notesRouter.get('/notes/:noteId', getNoteById);
 
 // 3. ВИПРАВЛЕНО: Маршрут POST для створення нотатки (шлях /notes, функція createNote)
 notesRouter.post('/notes', createNote);
