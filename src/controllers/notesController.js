@@ -151,12 +151,14 @@ import createHttpError from 'http-errors';
 import Note from '../models/note.js';
 
 // 1. ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
+//основна сторінка
 export const getAllNotes = async (req, res) => {
   const notes = await Note.find();
   res.status(200).json(notes);
 };
 
 // 2. ВИПРАВЛЕНО: Повідомлення про помилку змінено зі Student на Note
+// пошук за ID
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
   const result = await Note.findById(noteId);
@@ -170,6 +172,7 @@ export const getNoteById = async (req, res) => {
 };
 
 // 3. ВИПРАВЛЕНО: Функція перейменована на createNote, змінні змінено на newNote та об'єкт на Note
+// Post обробка створення новоі нотатки
 export const createNote = async (req, res) => {
   const newNote = await Note.create(req.body);
   if (!newNote) {
@@ -179,6 +182,7 @@ export const createNote = async (req, res) => {
 };
 
 // 4. ВИПРАВЛЕНО: Функція перейменована на updateNote, параметр змінено на noteId, повідомлення на Note
+// Оновлення нотатки за допомогою PATCH
 export const updateNote = async (req, res) => {
   const { noteId } = req.params; // Змінено з id на noteId
 
@@ -194,6 +198,7 @@ export const updateNote = async (req, res) => {
 };
 
 // 5. ВИПРАВЛЕНО: Функція перейменована на deleteNote, параметр змінено на noteId, повідомлення на Note
+// Видалення нотатки DELETE
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params; // Змінено з id на noteId
   const deleteNoteData = await Note.findByIdAndDelete(noteId);
