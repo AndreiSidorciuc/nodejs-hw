@@ -29,6 +29,7 @@
 // export default studentRouter;
 
 import { Router } from 'express';
+import { ctrlWrapper } from '../utils/asyncHandler.js';
 import {
   getAllNotes, // Змінено з getNote
   getNoteById, //Поайді get запит
@@ -41,18 +42,19 @@ import {
 const notesRouter = Router();
 
 // 2. ВИПРАВЛЕНО: Маршрут GET для всіх нотаток (шлях /notes, функція getAllNotes)
-notesRouter.get('/notes', getAllNotes);
+notesRouter.get('/notes', ctrlWrapper(getAllNotes));
 
-notesRouter.get('/notes/:noteId', getNoteById);
+// 3. ВИПРАВЛЕНО: Маршрут GET для пошуку за id (шлях /notes/:noteId , функція getNoteById)
+notesRouter.get('/notes/:noteId', ctrlWrapper(getNoteById));
 
-// 3. ВИПРАВЛЕНО: Маршрут POST для створення нотатки (шлях /notes, функція createNote)
-notesRouter.post('/notes', createNote);
+// 4. ВИПРАВЛЕНО: Маршрут POST для створення нотатки (шлях /notes, функція createNote)
+notesRouter.post('/notes', ctrlWrapper(createNote));
 
-// 4. ВИПРАВЛЕНО: Маршрут PATCH (шлях /notes/:noteId, функція updateNote)
-notesRouter.patch('/notes/:noteId', updateNote);
+// 5. ВИПРАВЛЕНО: Маршрут PATCH (шлях /notes/:noteId, функція updateNote)
+notesRouter.patch('/notes/:noteId', ctrlWrapper(updateNote));
 
-// 5. ВИПРАВЛЕНО: Маршрут DELETE (шлях /notes/:noteId, funkція deleteNote)
-notesRouter.delete('/notes/:noteId', deleteNote);
+// 6. ВИПРАВЛЕНО: Маршрут DELETE (шлях /notes/:noteId, funkція deleteNote)
+notesRouter.delete('/notes/:noteId', ctrlWrapper(deleteNote));
 
 // Експортуємо весь Router як дефолтний експорт
 export default notesRouter;

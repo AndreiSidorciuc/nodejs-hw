@@ -65,80 +65,142 @@
 //   // res.status(204).send();
 // };
 
+// -------------------------v2  трохи покращений варіант -------------------------------
+
+// import createHttpError from 'http-errors';
+// import Note from '../models/note.js';
+
+// // 1. ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
+// export const getAllNotes = async (req, res, next) => {
+//   try {
+//     const notes = await Note.find();
+//     res.status(200).json(notes);
+//   } catch (error) {
+//     next(error); // Передаємо помилку далі в errorHandler middleware
+//   }
+// };
+
+// // 2. ВИПРАВЛЕНО: Повідомлення про помилку змінено зі Student на Note
+// export const getNoteById = async (req, res, next) => {
+//   try {
+//     const { noteId } = req.params;
+//     const result = await Note.findById(noteId);
+
+//     if (!result) {
+//       // Використовуємо правильний об'єкт у повідомленні
+//       return next(createHttpError(404, `Note with id = ${noteId} not found`));
+//     }
+
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// // 3. ВИПРАВЛЕНО: Функція перейменована на createNote, змінні змінено на newNote та об'єкт на Note
+// export const createNote = async (req, res, next) => {
+//   try {
+//     const newNote = await Note.create(req.body);
+//     if (!newNote) {
+//       return next(createHttpError(404, `Note not created`));
+//     }
+//     res.status(201).json(newNote);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// // 4. ВИПРАВЛЕНО: Функція перейменована на updateNote, параметр змінено на noteId, повідомлення на Note
+// export const updateNote = async (req, res, next) => {
+//   try {
+//     const { noteId } = req.params; // Змінено з id на noteId
+
+//     const updateNoteData = await Note.findByIdAndUpdate(noteId, req.body, {
+//       returnDocument: 'after',
+//     });
+
+//     if (!updateNoteData) {
+//       return next(createHttpError(404, `Note with id ${noteId} not found`));
+//     }
+
+//     res.status(200).json(updateNoteData);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// // 5. ВИПРАВЛЕНО: Функція перейменована на deleteNote, параметр змінено на noteId, повідомлення на Note
+// export const deleteNote = async (req, res, next) => {
+//   try {
+//     const { noteId } = req.params; // Змінено з id на noteId
+//     const deleteNoteData = await Note.findByIdAndDelete(noteId);
+
+//     if (!deleteNoteData) {
+//       return next(createHttpError(404, `Note with id ${noteId} not found`));
+//     }
+
+//     res.status(200).json(deleteNoteData);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// ----- v3 поки найкращий варіант із додаваннім додатковоі функціі ctrlWrapper/utils/asyncHandler.js тобто обробки помилки щоб сервер не упав --------------
+
 import createHttpError from 'http-errors';
 import Note from '../models/note.js';
 
 // 1. ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
-export const getAllNotes = async (req, res, next) => {
-  try {
-    const notes = await Note.find();
-    res.status(200).json(notes);
-  } catch (error) {
-    next(error); // Передаємо помилку далі в errorHandler middleware
-  }
+export const getAllNotes = async (req, res) => {
+  const notes = await Note.find();
+  res.status(200).json(notes);
 };
 
 // 2. ВИПРАВЛЕНО: Повідомлення про помилку змінено зі Student на Note
-export const getNoteById = async (req, res, next) => {
-  try {
-    const { noteId } = req.params;
-    const result = await Note.findById(noteId);
+export const getNoteById = async (req, res) => {
+  const { noteId } = req.params;
+  const result = await Note.findById(noteId);
 
-    if (!result) {
-      // Використовуємо правильний об'єкт у повідомленні
-      return next(createHttpError(404, `Note with id = ${noteId} not found`));
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
+  if (!result) {
+    // Використовуємо правильний об'єкт у повідомленні
+    throw createHttpError(404, `Note with id = ${noteId} not found`);
   }
+
+  res.status(200).json(result);
 };
 
 // 3. ВИПРАВЛЕНО: Функція перейменована на createNote, змінні змінено на newNote та об'єкт на Note
-export const createNote = async (req, res, next) => {
-  try {
-    const newNote = await Note.create(req.body);
-    if (!newNote) {
-      return next(createHttpError(404, `Note not created`));
-    }
-    res.status(201).json(newNote);
-  } catch (error) {
-    next(error);
+export const createNote = async (req, res) => {
+  const newNote = await Note.create(req.body);
+  if (!newNote) {
+    throw createHttpError(404, `Note not created`);
   }
+  res.status(201).json(newNote);
 };
 
 // 4. ВИПРАВЛЕНО: Функція перейменована на updateNote, параметр змінено на noteId, повідомлення на Note
-export const updateNote = async (req, res, next) => {
-  try {
-    const { noteId } = req.params; // Змінено з id на noteId
+export const updateNote = async (req, res) => {
+  const { noteId } = req.params; // Змінено з id на noteId
 
-    const updateNoteData = await Note.findByIdAndUpdate(noteId, req.body, {
-      returnDocument: 'after',
-    });
+  const updateNoteData = await Note.findByIdAndUpdate(noteId, req.body, {
+    returnDocument: 'after',
+  });
 
-    if (!updateNoteData) {
-      return next(createHttpError(404, `Note with id ${noteId} not found`));
-    }
-
-    res.status(200).json(updateNoteData);
-  } catch (error) {
-    next(error);
+  if (!updateNoteData) {
+    throw createHttpError(404, `Note with id ${noteId} not found`);
   }
+
+  res.status(200).json(updateNoteData);
 };
 
 // 5. ВИПРАВЛЕНО: Функція перейменована на deleteNote, параметр змінено на noteId, повідомлення на Note
-export const deleteNote = async (req, res, next) => {
-  try {
-    const { noteId } = req.params; // Змінено з id на noteId
-    const deleteNoteData = await Note.findByIdAndDelete(noteId);
+export const deleteNote = async (req, res) => {
+  const { noteId } = req.params; // Змінено з id на noteId
+  const deleteNoteData = await Note.findByIdAndDelete(noteId);
 
-    if (!deleteNoteData) {
-      return next(createHttpError(404, `Note with id ${noteId} not found`));
-    }
-
-    res.status(200).json(deleteNoteData);
-  } catch (error) {
-    next(error);
+  if (!deleteNoteData) {
+    throw createHttpError(404, `Note with id ${noteId} not found`);
   }
+
+  res.status(200).json(deleteNoteData);
 };
