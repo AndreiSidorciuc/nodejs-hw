@@ -58,6 +58,7 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import { errors } from 'celebrate';
 import { logger } from './middleware/logger.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import notesRouter from './routes/notesRoutes.js';
@@ -82,6 +83,11 @@ app.use(notesRouter);
 
 // тут винесли обробник помилки по ід
 app.use(notFoundHandler);
+
+// Викликаємо функцію яка буде показувати правельні помилки для notesValidation.js/celebrate
+// необхідно викликати перед errorHandler тому, що якщо після
+// то errorHandler буде перехоплювати цю помилку та не буде виводитись правельний статус та текст помилки
+app.use(errors());
 
 // тут був обробник помилок який ми винесли загальний
 app.use(errorHandler);

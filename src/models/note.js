@@ -43,6 +43,7 @@
 // export default Student;
 
 import { Schema, model } from 'mongoose';
+import { notesTypList } from '../constants/tags.js';
 // Створення схеми для нотатки
 const noteSchema = new Schema(
   {
@@ -58,19 +59,8 @@ const noteSchema = new Schema(
     },
     tag: {
       type: String,
-      enum: [
-        'Work',
-        'Personal',
-        'Meeting',
-        'Shopping',
-        'Ideas',
-        'Travel',
-        'Finance',
-        'Health',
-        'Important',
-        'Todo',
-      ],
-      default: 'Todo',
+      enum: notesTypList,
+      default: notesTypList[0],
     },
   },
   {
@@ -85,3 +75,34 @@ const noteSchema = new Schema(
 const Note = model('Note', noteSchema);
 
 export default Note;
+
+// import { Schema, model } from 'mongoose';
+
+// // Создание схемы для Пользователя
+// const userSchema = new Schema(
+//   {
+//     email: {
+//       type: String,
+//       required: true,
+//       unique: true, // КРИТИЧЕСКИ ВАЖНО: гарантирует, что один email нельзя зарегистрировать дважды
+//       trim: true,
+//       lowercase: true, // Автоматически переводит email в нижний регистр перед сохранением
+//     },
+//     password: {
+//       type: String,
+//       required: true,
+//       // select: false // (Опционально) скрывает пароль из результатов запросов к БД для безопасности
+//     },
+//   },
+//   {
+//     // Автоматическое добавление полей createdAt и updatedAt
+//     timestamps: true,
+//     versionKey: false,
+//   },
+// );
+
+// // Создание и экспорт модели
+// // Mongoose автоматически создаст коллекцию "users"
+// const User = model('User', userSchema);
+
+// export default User;

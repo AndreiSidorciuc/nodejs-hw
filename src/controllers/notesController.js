@@ -161,13 +161,11 @@ export const getAllNotes = async (req, res) => {
 // пошук за ID
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
-  const result = await Note.findById(noteId);
-
+  const result = await Note.findById(noteId); // якщо
   if (!result) {
     // Використовуємо правильний об'єкт у повідомленні
     throw createHttpError(404, `Note with id = ${noteId} not found`);
   }
-
   res.status(200).json(result);
 };
 
@@ -185,15 +183,12 @@ export const createNote = async (req, res) => {
 // Оновлення нотатки за допомогою PATCH
 export const updateNote = async (req, res) => {
   const { noteId } = req.params; // Змінено з id на noteId
-
   const updateNoteData = await Note.findByIdAndUpdate(noteId, req.body, {
     returnDocument: 'after',
   });
-
   if (!updateNoteData) {
     throw createHttpError(404, `Note with id ${noteId} not found`);
   }
-
   res.status(200).json(updateNoteData);
 };
 
@@ -202,10 +197,8 @@ export const updateNote = async (req, res) => {
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params; // Змінено з id на noteId
   const deleteNoteData = await Note.findByIdAndDelete(noteId);
-
   if (!deleteNoteData) {
     throw createHttpError(404, `Note with id ${noteId} not found`);
   }
-
   res.status(200).json(deleteNoteData);
 };
