@@ -29,6 +29,4 @@ const noteSchema = new Schema(
 noteSchema.index({ tag: 1 });
 
 // Створення моделі
-const Note = model('Note', noteSchema);
-
-export default Note;
+export const Note = model('Note', noteSchema);

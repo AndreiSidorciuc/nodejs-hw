@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
-import Note from '../models/note.js';
+import { Note } from '../models/note.js';
 
-// ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
 //основна сторінка
 export const getAllNotes = async (req, res) => {
   // Отримуємо параметри пагінації та фільтрації з req.query
@@ -20,7 +19,7 @@ export const getAllNotes = async (req, res) => {
     notesQuery.where({ tag });
   }
 
-  // ФІЛЬТРАЦІЯ: Якщо передано текст для пошуку — використовуємо $regex та $or за ТЗ
+  // ФІЛЬТРАЦІЯ: Якщо передано текст для пошуку — використовуємо $regex та $or
   if (search) {
     notesQuery.where({
       $or: [
@@ -44,7 +43,7 @@ export const getAllNotes = async (req, res) => {
   res.status(200).json({
     page: pageNumber,
     perPage: perPageNumber,
-    totalNotes, // ВИПРАВЛЕНО: Ключ тепер називається totalNotes замість totalItems
+    totalNotes,
     totalPages,
     notes,
   });
