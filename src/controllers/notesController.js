@@ -148,7 +148,7 @@
 // ----- v3 поки найкращий варіант із додаваннім додатковоі функціі ctrlWrapper/utils/asyncHandler.js тобто обробки помилки щоб сервер не упав --------------
 
 import createHttpError from 'http-errors';
-import Note from '../models/note.js';
+import { Note } from '../models/note.js';
 
 // 1. ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
 //основна сторінка
