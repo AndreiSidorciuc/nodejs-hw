@@ -1,6 +1,6 @@
 // src/constants/tags.js
 
-export const notesTypList = [
+export const TAGS = [
   'Work',
   'Personal',
   'Meeting',

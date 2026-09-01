@@ -48,11 +48,7 @@ import {
 const notesRouter = Router();
 
 // 2. ВИПРАВЛЕНО: Маршрут GET для всіх нотаток (шлях /notes, функція getAllNotes)
-notesRouter.get(
-  '/notes',
-  celebrate(getAllNotesSchema, { abortEarly: false }),
-  getAllNotes,
-);
+notesRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes); //celebrate(getAllNotesSchema)
 
 // 3. ВИПРАВЛЕНО: Маршрут GET для пошуку за id (шлях /notes/:noteId , функція getNoteById) також
 // необхідно додати для виводу всіх помилок які будуть необхідно додати
@@ -60,11 +56,7 @@ notesRouter.get(
 // за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
 // після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
 // змінюємо на false щоб перевірка продовжувалась та виявлялись усі помилки та виводились
-notesRouter.get(
-  '/notes/:noteId',
-  celebrate(noteIdSchema, { abortEarly: false }),
-  getNoteById,
-);
+notesRouter.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 
 // 4. ВИПРАВЛЕНО: Маршрут POST для створення нотатки (шлях /notes, функція createNote) також
 // необхідно додати для виводу всіх помилок які будуть необхідно додати
@@ -84,11 +76,7 @@ notesRouter.post(
 // за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
 // після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
 // змінюємо на false об перевірка продовжувалась та виявлялись усі помилки та виводились
-notesRouter.patch(
-  '/notes/:noteId',
-  celebrate(updateNoteSchema, { abortEarly: false }),
-  updateNote,
-);
+notesRouter.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
 
 // 6. ВИПРАВЛЕНО: Маршрут DELETE (шлях /notes/:noteId, funkція deleteNote) також
 // необхідно додати для виводу всіх помилок які будуть необхідно додати
@@ -96,11 +84,7 @@ notesRouter.patch(
 // за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
 // після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
 // змінюємо на false об перевірка продовжувалась та виявлялись усі помилки та виводились
-notesRouter.delete(
-  '/notes/:noteId',
-  celebrate(noteIdSchema, { abortEarly: false }),
-  deleteNote,
-);
+notesRouter.delete('/notes/:noteId', celebrate(noteIdSchema), deleteNote);
 
 // Експортуємо весь Router як дефолтний експорт
 export default notesRouter;

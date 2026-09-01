@@ -43,7 +43,7 @@
 // export default Student;
 
 import { Schema, model } from 'mongoose';
-import { notesTypList } from '../constants/tags.js';
+import { TAGS } from '../constants/tags.js';
 // Створення схеми для нотатки
 const noteSchema = new Schema(
   {
@@ -59,8 +59,9 @@ const noteSchema = new Schema(
     },
     tag: {
       type: String,
-      enum: notesTypList,
-      default: notesTypList[0],
+      enum: TAGS,
+      default: TAGS[0],
+      index: true, // 🌟 ДОДАНО ІНДЕКС ДЛЯ ОПТИМІЗАЦІЇ ФІЛЬТРАЦІЇ
     },
   },
   {
