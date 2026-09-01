@@ -148,7 +148,7 @@
 // ----- v3 поки найкращий варіант із додаваннім додатковоі функціі ctrlWrapper/utils/asyncHandler.js тобто обробки помилки щоб сервер не упав --------------
 
 import createHttpError from 'http-errors';
-import Note from '../models/note.js';
+import { Note } from '../models/note.js';
 
 // 1. ВИПРАВЛЕНО: Функція перейменована на getAllNotes, змінні змінено на notes
 //основна сторінка
@@ -181,21 +181,21 @@ export const getAllNotes = async (req, res) => {
 
   // 5. ПАГІНАЦІЯ ТА ПІДРАХУНОК: Виконуємо запити паралельно
   // clone() потрібен, щоб виконати підрахунок кількості без урахування skip та limit
-  const [totalItems, notes] = await Promise.all([
+  const [totalNotes, notes] = await Promise.all([
     notesQuery.clone().countDocuments(),
     notesQuery.skip(skip).limit(perPageNumber),
   ]);
 
   // Розраховуємо загальну кількість сторінок
-  const totalPages = Math.ceil(totalItems / perPageNumber);
+  const totalPages = Math.ceil(totalNotes / perPageNumber);
 
   // 6. ВІДПОВІДЬ СЕРВЕРА: Повертаємо об'єкт із пагінацією та масивом нотаток
   res.status(200).json({
     page: pageNumber,
     perPage: perPageNumber,
-    totalItems,
+    totalNotes, // ВИПРАВЛЕНО: Ключ тепер називається totalNotes замість totalItems
     totalPages,
-    notes, // Масив відфільтрованих нотаток, як вимагає ТЗ
+    notes,
   });
 };
 

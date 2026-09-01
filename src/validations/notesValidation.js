@@ -136,15 +136,17 @@ export const getAllNotesSchema = {
   [Segments.QUERY]: Joi.object({
     page: Joi.number().integer().min(1).default(1),
     perPage: Joi.number().integer().min(5).max(20).default(10),
-    tag: Joi.string().valid(...TAGS),
-    search: Joi.string().allow(''),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
+    search: Joi.string().allow('').optional(),
   }),
 };
 
 //  Схема для POST /notes
 export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
-    title: Joi.string().required().messages({
+    title: Joi.string().min(1).required().messages({
       // 1. Когда поле вообще не передали в JSON
       'any.required': 'Поле є обовʼязковим для заповнення!',
       // 2. ИСПРАВЛЕНО: Когда передали пустую строку ""
@@ -168,13 +170,13 @@ export const noteIdSchema = {
 export const updateNoteSchema = {
   // Перевикористовуємо валидацию параметрів із noteIdSchema
   [Segments.PARAMS]: Joi.object({
-    noteId: noteIdSchema,
+    noteId: idValidation.required(),
   }),
 
   // Тепер створюємо  Схему для PATCH
   [Segments.BODY]: Joi.object({
-    title: Joi.string(),
-    content: Joi.string(),
+    title: Joi.string().min(1),
+    content: Joi.string().allow(''),
     tag: Joi.string().valid(...TAGS),
   }).min(1), // важливо: не дозволяємо порожнє тіло має бути це вказує що б хочаб одне щось перевірялось
 };

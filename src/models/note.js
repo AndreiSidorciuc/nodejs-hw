@@ -73,9 +73,7 @@ const noteSchema = new Schema(
 
 // Створення та експорт моделі
 // Mongoose автоматично створить колекцію з назвою "notes" (у множині)
-const Note = model('Note', noteSchema);
-
-export default Note;
+export const Note = model('Note', noteSchema);
 
 // import { Schema, model } from 'mongoose';
 
