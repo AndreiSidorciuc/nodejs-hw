@@ -49,32 +49,33 @@ const noteSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, 'Title is required'], // ВИПРАВЛЕНО: додано повідомлення про помилку
       trim: true,
     },
     content: {
       type: String,
+      required: false, // ВИПРАВЛЕНО: явно вказано, що поле не є обов'язковим
       default: '',
       trim: true,
     },
     tag: {
       type: String,
       enum: TAGS,
-      default: TAGS[0],
-      index: true, // 🌟 ДОДАНО ІНДЕКС ДЛЯ ОПТИМІЗАЦІЇ ФІЛЬТРАЦІЇ
+      default: 'Todo', // ВИПРАВЛЕНО: встановлено рядок 'Todo' замість TAGS[0] за ТЗ
+      index: true,
     },
   },
   {
-    // Автоматичне додавання полів createdAt та updatedAt
     timestamps: true,
     versionKey: false,
   },
 );
 
-// Створення та експорт моделі
-// Mongoose автоматично створить колекцію з назвою "notes" (у множині)
-export const Note = model('Note', noteSchema);
+// Створення моделі
+const Note = model('Note', noteSchema);
 
+// ВИПРАВЛЕНО: Повернено дефолтний експорт на вимогу рев'юера
+export default Note;
 // import { Schema, model } from 'mongoose';
 
 // // Создание схемы для Пользователя
