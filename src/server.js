@@ -64,18 +64,24 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import notesRouter from './routes/notesRoutes.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import authRoutes from './routes/authRoutes.js';
+import cookieParser from 'cookie-parser';
 
 // створюємо Сервер
 const app = express();
-
 // Запускаємо сервер та читаємо тіло цього запиту
 app.use(express.json());
-
 // Показуємо логі в терміналі через функцію PinoHttp бібліотеку pino-http
 app.use(logger);
-
 // Дозволяє робити запити до сервера з інших айпі адрес
 app.use(cors());
+// Викликаємо парсер кукі щоб іх прочитати та повернути на фронтенд без цього не кукі не читаються
+app.use(cookieParser());
+
+// --------------------------------- Routu -----------------------------------------------------------
+
+// Router Авторизаціі КОРИСТУВАЧА
+app.use(authRoutes);
 
 // ВИПРАВЛЕНО: Реєструємо роутер ТІЛЬКИ ОДИН РАЗ і БЕЗ префіксу шляху.
 // Усі шляхи (/notes та /notes/:noteId) вже визначені всередині notesRoutes.js
@@ -100,5 +106,5 @@ const PORT = Number(process.env.PORT) || 3000;
 
 // Логінимо запуск сервера
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`✈️ Ready on http://localhost:${PORT}`);
 });

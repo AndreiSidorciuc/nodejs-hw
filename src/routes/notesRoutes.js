@@ -43,60 +43,42 @@ import {
   createNoteSchema,
   updateNoteSchema,
 } from '../validations/notesValidation.js';
+import { authenticate } from '../middleware/authenticate.js';
 
-// 1. ВИПРАВЛЕНО: Змінну названо notesRouter замість studentRouter
 const notesRouter = Router();
 
-// 2. ВИПРАВЛЕНО: Маршрут GET для всіх нотаток (шлях /notes, функція getAllNotes)
-notesRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes); //celebrate(getAllNotesSchema)
+// ВИПРАВЛЕНО: Глобально застосовуємо мідлвару до абсолютно всіх маршрутів цього роутера
+notesRouter.use(authenticate);
 
-// 3. ВИПРАВЛЕНО: Маршрут GET для пошуку за id (шлях /notes/:noteId , функція getNoteById) також
-// необхідно додати для виводу всіх помилок які будуть необхідно додати
-// ще одне налаштування celebrate/{abortEarly:false} яке за замовчуванням має true тому ми змінили на false
-// за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
-// після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
-// змінюємо на false щоб перевірка продовжувалась та виявлялись усі помилки та виводились
+// Маршрут GET для всіх нотаток
+notesRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
+
+// Маршрут GET для пошуку за id
 notesRouter.get(
   '/notes/:noteId',
   celebrate(noteIdSchema, { abortEarly: false }),
   getNoteById,
 );
 
-// 4. ВИПРАВЛЕНО: Маршрут POST для створення нотатки (шлях /notes, функція createNote) також
-// необхідно додати для виводу всіх помилок які будуть необхідно додати
-// ще одне налаштування celebrate/{abortEarly:false} яке за замовчуванням має true тому ми змінили на false
-// за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
-// після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
-// змінюємо на false об перевірка продовжувалась та виявлялись усі помилки та виводились
+// Маршрут POST для створення нотатки
 notesRouter.post(
   '/notes',
   celebrate(createNoteSchema, { abortEarly: false }),
   createNote,
 );
 
-// 5. ВИПРАВЛЕНО: Маршрут PATCH (шлях /notes/:noteId, функція updateNote) також
-// необхідно додати для виводу всіх помилок які будуть необхідно додати
-// ще одне налаштування celebrate/{abortEarly:false} яке за замовчуванням має true тому ми змінили на false
-// за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
-// після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
-// змінюємо на false об перевірка продовжувалась та виявлялись усі помилки та виводились
+// Маршрут PATCH для оновлення нотатки
 notesRouter.patch(
   '/notes/:noteId',
   celebrate(updateNoteSchema, { abortEarly: false }),
   updateNote,
 );
 
-// 6. ВИПРАВЛЕНО: Маршрут DELETE (шлях /notes/:noteId, funkція deleteNote) також
-// необхідно додати для виводу всіх помилок які будуть необхідно додати
-// ще одне налаштування celebrate/{abortEarly:false} за замовчуванням true тому ми змінили на false
-// за замовчуванням обробляється тільки одна помилка яка перша була знайдена далі не шукає тому що
-// після знайдення першоі перевірка далі призупиняється та вона виводиться тому ми
-// змінюємо на false об перевірка продовжувалась та виявлялись усі помилки та виводились
+// Маршрут DELETE для видалення нотатки
 notesRouter.delete(
   '/notes/:noteId',
   celebrate(noteIdSchema, { abortEarly: false }),
   deleteNote,
 );
 
-// Експортуємо весь Router як дефолтний експорт
 export default notesRouter;

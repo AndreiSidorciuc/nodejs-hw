@@ -19,6 +19,12 @@ const noteSchema = new Schema(
       enum: TAGS,
       default: 'Todo',
     },
+    // Нова властивість
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -26,7 +32,9 @@ const noteSchema = new Schema(
   },
 );
 
-noteSchema.index({ tag: 1 });
+noteSchema.index({ userId: 1, tag: 1 });
 
 // Створення моделі
-export const Note = model('Note', noteSchema);
+const Note = model('Note', noteSchema);
+
+export default Note;
