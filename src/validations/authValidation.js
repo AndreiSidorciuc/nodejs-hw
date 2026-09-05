@@ -1,11 +1,11 @@
 import { Segments, Joi } from 'celebrate';
-import { emailRegex } from '../constants/authConstsants.js';
+import { emailRegex } from '../constants/authConstants.js';
 
 export const registerUserSchema = {
   [Segments.BODY]: Joi.object({
     username: Joi.string().min(3),
     //                 додаємо свою перевірку
-    email: Joi.string().email().pattern(emailRegex).required(),
+    email: Joi.string().pattern(emailRegex).required(),
     password: Joi.string().min(8).required(),
   }),
 };
@@ -13,7 +13,7 @@ export const registerUserSchema = {
 export const loginUserSchema = {
   [Segments.BODY]: Joi.object({
     //                 додаємо свою перевірку
-    email: Joi.string().email().pattern(emailRegex).required(),
-    password: Joi.string().min(8).required(),
+    email: Joi.string().pattern(emailRegex).required(),
+    password: Joi.string().required(),
   }),
 };

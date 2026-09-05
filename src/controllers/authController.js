@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import User from '../models/user.js';
-import Session from '../models/session.js';
+import { User } from '../models/user.js';
+import { Session } from '../models/session.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 
 // Хешування паролю викликаємо бібліотеку обовязково з await тому що це асенхрона операція
@@ -74,35 +74,47 @@ export const loginUser = async (req, res) => {
 
 // --------------------------------------------------------------------------------------------------
 export const refreshUserSession = async (req, res) => {
-  const { sessionId } = req.cookies;
+  const { sessionId, refreshToken } = req.cookies;
   // перевіряємо чи є сесія в даного користувача
-  const session = await Session.findOne({ _id: sessionId });
+  const session = await Session.findOne({ _id: sessionId, refreshToken });
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
 
   //Якщо сесія є Перевіряємо чи токен не прострочений
   if (session.refreshTokenValidUntil < new Date()) {
+    // Якщо токен застарів
+    // видаляємо стару
+    // Створюємо видалення сессіі
+    await Session.deleteOne({ _id: sessionId });
+
+    // очищаємо всі три куки у клієнта
+    res.clearCookie('sessionId');
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     throw createHttpError(401, 'Session token expired');
   }
 
-  // Якщо токен застарів
-  // видаляємо стару
-  // Створюємо видалення сессіі
+  // 3. Якщо токен валідний — видаляємо стару успішну сесію
   await Session.deleteOne({ _id: sessionId });
 
-  // Створюємо нову сесію
+  // 4. Створюємо нову сесію та нові кукі
   const newSession = await createSession(session.userId);
-
-  // Створюємо кукі за допомогою HttpOnly COOKIE
-  // 3. Викликаємо, передаємо об'єкт відповіді та сесію
   setSessionCookies(res, newSession);
 
-  // повертаємо юзера
   res.status(200).json({
     message: 'Session refreshed',
   });
 };
+// Створюємо кукі за допомогою HttpOnly COOKIE
+// 3. Викликаємо, передаємо об'єкт відповіді та сесію
+// setSessionCookies(res, newSession);
+
+// повертаємо юзера
+//   res.status(200).json({
+//     message: 'Session refreshed',
+//   });
+// };;
 
 // -------------------------------------------------------------------------------------------------
 export const logoutUser = async (req, res) => {

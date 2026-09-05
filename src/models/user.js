@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { emailRegex } from '../constants/authConstsants.js';
+import { emailRegex } from '../constants/authConstants.js';
 
 const userSchema = new Schema(
   {
@@ -44,6 +44,4 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
-const User = model('User', userSchema);
-
-export default User;
+export const User = model('User', userSchema);
