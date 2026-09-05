@@ -100,21 +100,13 @@ export const refreshUserSession = async (req, res) => {
 
   // 4. Створюємо нову сесію та нові кукі
   const newSession = await createSession(session.userId);
+  // 3. Викликаємо, передаємо об'єкт відповіді та сесію
   setSessionCookies(res, newSession);
 
   res.status(200).json({
     message: 'Session refreshed',
   });
 };
-// Створюємо кукі за допомогою HttpOnly COOKIE
-// 3. Викликаємо, передаємо об'єкт відповіді та сесію
-// setSessionCookies(res, newSession);
-
-// повертаємо юзера
-//   res.status(200).json({
-//     message: 'Session refreshed',
-//   });
-// };;
 
 // -------------------------------------------------------------------------------------------------
 export const logoutUser = async (req, res) => {
