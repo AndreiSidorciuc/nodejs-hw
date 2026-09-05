@@ -36,6 +36,4 @@ noteSchema.index({ tag: 1 });
 noteSchema.index({ userId: 1 });
 
 // Створення моделі
-const Note = model('Note', noteSchema);
-
-export default Note;
+export const Note = model('Note', noteSchema);

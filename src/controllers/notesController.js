@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import Note from '../models/note.js';
+import { Note } from '../models/note.js';
 
 // 1. ОТРИМАННЯ ВСІХ НОТАТОК (ТІЛЬКИ ПОТОЧНОГО КОРИСТУВАЧА)
 export const getAllNotes = async (req, res, next) => {
